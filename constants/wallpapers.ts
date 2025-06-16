@@ -3,7 +3,7 @@ export type Wallpaper = 'default' | 'dots' | 'hearts' | 'stars' | 'gradient' | '
 export const WALLPAPERS = {
   default: {
     name: 'Default',
-    style: 'bg-background'
+    style: 'bg-pale-blue-gradient' // Changed from 'bg-background'
   },
   dots: {
     name: 'Polka Dots',

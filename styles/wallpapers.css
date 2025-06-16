@@ -15,6 +15,10 @@
   background-color: #f0fdf4;
 }
 
+.bg-pale-blue-gradient {
+  background: linear-gradient(135deg, #b2d8f0 0%, #d6b7dc 100%); /* light sky blue to a slightly darker sky blue */
+}
+
 .bg-rainbow-gradient {
   background: linear-gradient(135deg, 
     #fbcfe8 0%,    /* pink-200 */
