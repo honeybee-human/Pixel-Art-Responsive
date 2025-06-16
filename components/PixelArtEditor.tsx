@@ -5,6 +5,7 @@ import { EditorStateProvider } from '../contexts/EditorStateContext';
 import { EditorActionsProvider } from '../contexts/EditorActionsContext';
 import { useCanvasLogic } from '../hooks/useCanvasLogic';
 import { useEditorState } from '../hooks/useEditorState';
+import { useTheme } from '../contexts/ThemeContext'; // Import the enhanced theme hook
 import { PixelArtEditorProps } from '../types';
 import { WALLPAPERS } from '../constants/wallpapers';
 import { PRESET_TEMPLATES } from '../constants/templates';
@@ -15,6 +16,9 @@ import { ThemeToggle } from './ui/theme-toggle';
 export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: PixelArtEditorProps) {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = React.useState(600);
+  
+  // Get theme context
+  const { updatePrimaryForWallpaper } = useTheme();
 
   // Editor state management
   const {
@@ -53,7 +57,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
       if (canvasContainerRef.current) {
         const container = canvasContainerRef.current;
         const containerRect = container.getBoundingClientRect();
-        const availableWidth = containerRect.width - 48; // Account for padding
+        const availableWidth = containerRect.width - 48;
         const availableHeight = containerRect.height - 48;
         const maxSize = Math.min(availableWidth, availableHeight, CANVAS_SIZE_LIMITS.MAX);
         const newSize = Math.max(maxSize, CANVAS_SIZE_LIMITS.MIN);
@@ -65,6 +69,12 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     window.addEventListener('resize', updateCanvasSize);
     return () => window.removeEventListener('resize', updateCanvasSize);
   }, []);
+
+  // Update primary color when wallpaper changes
+  useEffect(() => {
+    // Update primary color based on the current wallpaper
+    updatePrimaryForWallpaper(wallpaper);
+  }, [wallpaper, updatePrimaryForWallpaper]);
 
   // Get wallpaper style
   const getWallpaperStyle = () => {
@@ -102,12 +112,10 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
   }, [setIsDrawing]);
 
   const loadPreset = useCallback((presetName: keyof typeof PRESET_TEMPLATES) => {
-    // Save current state before loading preset
     saveToHistory(pixels);
     
     const template = PRESET_TEMPLATES[presetName];
     if (template && template.length === 16) {
-      // Scale template to current grid size
       const scaledTemplate = Array(gridSize).fill(null).map((_, y) => 
         Array(gridSize).fill(null).map((_, x) => {
           const templateY = Math.floor(y * 16 / gridSize);
@@ -123,7 +131,6 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Create a new canvas without the grid
     const downloadCanvas = document.createElement('canvas');
     const downloadCtx = downloadCanvas.getContext('2d');
     if (!downloadCtx) return;
@@ -131,7 +138,6 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     downloadCanvas.width = gridSize;
     downloadCanvas.height = gridSize;
 
-    // Draw only the pixels (no grid)
     pixels.forEach((row, y) => {
       row.forEach((color, x) => {
         if (color !== 'transparent') {
@@ -141,7 +147,6 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
       });
     });
 
-    // Download the image
     const link = document.createElement('a');
     link.download = `pixel-art-${gridSize}x${gridSize}-${Date.now()}.png`;
     link.href = downloadCanvas.toDataURL();
@@ -183,16 +188,12 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           className={`w-screen h-screen overflow-hidden theme-overlay ${WALLPAPERS[wallpaper].style} ${className || ''}`}
           style={getWallpaperStyle()}
         >
-          {/* Main Content */}
           <div className="flex h-screen">
-            {/* Tools Sidebar */}
             <Sidebar />
 
-            {/* Canvas Area with Header */}
             <div className="flex-1 flex flex-col">
-              {/* Header - same width as canvas container */}
               <div className="flex items-center justify-between py-4 px-6 glass-header">
-                <div></div> {/* Left spacer */}
+                <div></div>
                 <div className="text-center">
                   <h1 className="mb-1">Pixel Art Editor</h1>
                   <p className="text-md dark:text-white">
@@ -204,7 +205,6 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                 </div>
               </div>
 
-              {/* Canvas Area */}
               <div className="flex-1 flex items-center justify-center p-6">
                 <div 
                   ref={canvasContainerRef}
