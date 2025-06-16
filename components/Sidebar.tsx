@@ -9,7 +9,7 @@ import { WallpaperSection } from './sidebar/WallpaperSection';
 
 export function Sidebar() {
   return (
-    <div className="w-80 p-4 border-r border-border/20 bg-card/95 backdrop-blur-sm overflow-y-auto">
+    <div className="w-80 p-4 glass-sidebar overflow-y-auto">
       <div className="space-y-4">
         <ToolsSection />
         <Separator />

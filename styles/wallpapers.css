@@ -1,0 +1,27 @@
+/* Wallpaper-specific styles */
+.bg-purple-50 {
+  background-color: #faf5ff;
+}
+
+.bg-pink-50 {
+  background-color: #fdf2f8;
+}
+
+.bg-yellow-50 {
+  background-color: #fefce8;
+}
+
+.bg-green-50 {
+  background-color: #f0fdf4;
+}
+
+.bg-rainbow-gradient {
+  background: linear-gradient(135deg, 
+    #fbcfe8 0%,    /* pink-200 */
+    #e9d5ff 20%,   /* purple-200 */ 
+    #bfdbfe 40%,   /* blue-200 */
+    #bbf7d0 60%,   /* green-200 */
+    #fef08a 80%,   /* yellow-200 */
+    #fbcfe8 100%   /* pink-200 */
+  );
+}

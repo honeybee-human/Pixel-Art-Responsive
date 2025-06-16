@@ -22,12 +22,16 @@ export function useCanvasLogic(gridSize: number, canvasSize: number) {
       // Limit history size
       if (newHistory.length > MAX_HISTORY_SIZE) {
         newHistory.shift();
+        setHistoryIndex(prev => prev); // Don't increment if we removed from start
         return newHistory;
       }
       
       return newHistory;
     });
-    setHistoryIndex(prev => Math.min(prev + 1, MAX_HISTORY_SIZE - 1));
+    setHistoryIndex(prev => {
+      const newIndex = prev + 1;
+      return newIndex >= MAX_HISTORY_SIZE ? MAX_HISTORY_SIZE - 1 : newIndex;
+    });
   }, [historyIndex]);
 
   // Initialize empty canvas
@@ -127,15 +131,17 @@ export function useCanvasLogic(gridSize: number, canvasSize: number) {
   }, [pixels, gridSize, saveToHistory]);
 
   const drawPixel = useCallback((x: number, y: number, currentTool: Tool, currentColor: string) => {
+    if (currentTool === 'fill') {
+      floodFill(x, y, currentColor);
+      return;
+    }
+    
     const newPixels = [...pixels];
     
     if (currentTool === 'pencil') {
       newPixels[y][x] = currentColor;
     } else if (currentTool === 'eraser') {
       newPixels[y][x] = 'transparent';
-    } else if (currentTool === 'fill') {
-      floodFill(x, y, currentColor);
-      return;
     }
     
     setPixels(newPixels);
@@ -143,15 +149,17 @@ export function useCanvasLogic(gridSize: number, canvasSize: number) {
 
   const undo = useCallback(() => {
     if (historyIndex > 0) {
-      setHistoryIndex(prev => prev - 1);
-      setPixels(history[historyIndex - 1].map(row => [...row]));
+      const newIndex = historyIndex - 1;
+      setHistoryIndex(newIndex);
+      setPixels(history[newIndex].map(row => [...row]));
     }
   }, [historyIndex, history]);
 
   const redo = useCallback(() => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex(prev => prev + 1);
-      setPixels(history[historyIndex + 1].map(row => [...row]));
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      setPixels(history[newIndex].map(row => [...row]));
     }
   }, [historyIndex, history]);
 

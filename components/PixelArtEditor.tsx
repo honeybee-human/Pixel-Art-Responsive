@@ -185,7 +185,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           style={getWallpaperStyle()}
         >
           {/* Header */}
-          <div className="flex items-center justify-center py-4 px-6 border-b border-border/20 bg-card/80 backdrop-blur-sm">
+          <div className="flex items-center justify-center py-4 px-6 glass-header">
             <div className="text-center">
               <h1 className="mb-1">Pixel Art Editor</h1>
               <p className="text-xs text-muted-foreground">
