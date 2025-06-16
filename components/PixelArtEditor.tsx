@@ -183,39 +183,42 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           className={`w-screen h-screen overflow-hidden theme-overlay ${WALLPAPERS[wallpaper].style} ${className || ''}`}
           style={getWallpaperStyle()}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between py-4 px-6 glass-header">
-            <div></div> {/* Left spacer */}
-            <div className="text-center">
-              <h1 className="mb-1">Pixel Art Editor</h1>
-              <p className="text-xs text-muted-foreground dark:text-white">
-                Create amazing pixel art with tools, colors, and templates
-              </p>
-            </div>
-            <div className="flex items-center">
-              <ThemeToggle />
-            </div>
-          </div>
-
           {/* Main Content */}
-          <div className="flex h-[calc(100vh-80px)]">
+          <div className="flex h-screen">
             {/* Tools Sidebar */}
             <Sidebar />
 
-            {/* Canvas Area */}
-            <div className="flex-1 flex items-center justify-center p-6">
-              <div 
-                ref={canvasContainerRef}
-                className="w-full h-full flex items-center justify-center"
-              >
-                <Canvas
-                  ref={canvasRef}
-                  canvasSize={canvasSize}
-                  onMouseDown={handleMouseDown}
-                  onMouseMove={handleMouseMove}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                />
+            {/* Canvas Area with Header */}
+            <div className="flex-1 flex flex-col">
+              {/* Header - same width as canvas container */}
+              <div className="flex items-center justify-between py-4 px-6 glass-header">
+                <div></div> {/* Left spacer */}
+                <div className="text-center">
+                  <h1 className="mb-1">Pixel Art Editor</h1>
+                  <p className="text-xs dark:text-white">
+                    Create amazing pixel art with tools, colors, and templates
+                  </p>
+                </div>
+                <div className="flex items-center">
+                  <ThemeToggle />
+                </div>
+              </div>
+
+              {/* Canvas Area */}
+              <div className="flex-1 flex items-center justify-center p-6">
+                <div 
+                  ref={canvasContainerRef}
+                  className="w-full h-full flex items-center justify-center"
+                >
+                  <Canvas
+                    ref={canvasRef}
+                    canvasSize={canvasSize}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                  />
+                </div>
               </div>
             </div>
           </div>
