@@ -8,7 +8,7 @@ export function PresetsSection() {
 
   return (
     <div>
-      <label className="text-sm mb-2 block">Preset Templates</label>
+      <label className="text-md mb-2 block">Preset Templates</label>
       <div className="grid grid-cols-2 gap-2">
         {Object.keys(PRESET_TEMPLATES).map((presetName) => (
           <Button
@@ -16,7 +16,7 @@ export function PresetsSection() {
             variant="outline"
             size="sm"
             onClick={() => onLoadPreset(presetName)}
-            className="text-xs capitalize"
+            className="text-md capitalize"
           >
             {presetName.replace(/([A-Z])/g, ' $1').trim()}
           </Button>

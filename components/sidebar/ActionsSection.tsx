@@ -8,7 +8,7 @@ export function ActionsSection() {
 
   return (
     <div>
-      <label className="text-sm mb-2 block">Actions</label>
+      <label className="text-md mb-2 block">Actions</label>
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Button 

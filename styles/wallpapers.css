@@ -25,3 +25,35 @@
     #fbcfe8 100%   /* pink-200 */
   );
 }
+
+/* Theme overlay classes */
+.theme-overlay {
+  position: relative;
+}
+
+.theme-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Light theme overlay - subtle light layer */
+.light .theme-overlay::before {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dark theme overlay - doubled darkness */
+.dark .theme-overlay::before {
+  background-color: rgba(0, 0, 0, 0.635);
+}
+
+/* Ensure content appears above overlay */
+.theme-overlay > * {
+  position: relative;
+  z-index: 1;
+}

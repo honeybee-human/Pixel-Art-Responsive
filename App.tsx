@@ -1,5 +1,12 @@
+import { ThemeProvider } from './contexts/ThemeContext';
 import { PixelArtEditor } from './components/PixelArtEditor';
 
-export default function App() {
-  return <PixelArtEditor />;
+function App() {
+  return (
+    <ThemeProvider>
+      <PixelArtEditor />
+    </ThemeProvider>
+  );
 }
+
+export default App;

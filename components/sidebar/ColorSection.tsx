@@ -8,11 +8,11 @@ export function ColorSection() {
 
   return (
     <div>
-      <label className="text-sm mb-2 block">Colors</label>
+      <label className="text-md mb-2 block">Colors</label>
       
       {/* Custom Color Picker */}
       <div className="mb-3">
-        <label className="text-xs mb-1 block text-muted-foreground">Custom Color</label>
+        <label className="text-md mb-1 block text-muted-foreground">Custom Color</label>
         <div className="flex items-center gap-2">
           <input
             type="color"
@@ -20,13 +20,13 @@ export function ColorSection() {
             onChange={(e) => onCustomColorChange(e.target.value)}
             className="w-8 h-8 rounded border border-border cursor-pointer"
           />
-          <span className="text-xs font-mono">{customColor}</span>
+          <span className="text-md font-mono">{customColor}</span>
         </div>
       </div>
       
       {/* Preset Colors */}
       <div>
-        <label className="text-xs mb-1 block text-muted-foreground">Preset Colors</label>
+        <label className="text-md mb-1 block text-muted-foreground">Preset Colors</label>
         <div className="grid grid-cols-6 gap-1">
           {PRESET_COLORS.map((color) => (
             <Button

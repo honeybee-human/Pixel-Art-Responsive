@@ -8,7 +8,7 @@ export function ToolsSection() {
 
   return (
     <div>
-      <label className="text-sm mb-2 block">Tools</label>
+      <label className="text-md mb-2 block">Tools</label>
       <div className="flex items-center gap-2">
         <Button
           variant={currentTool === 'pencil' ? 'default' : 'outline'}

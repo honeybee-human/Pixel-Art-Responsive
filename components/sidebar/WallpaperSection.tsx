@@ -9,7 +9,7 @@ export function WallpaperSection() {
 
   return (
     <div>
-      <label className="text-sm mb-2 block">Wallpaper</label>
+      <label className="text-md mb-2 block">Wallpaper</label>
       <div className="grid grid-cols-3 gap-1">
         {Object.entries(WALLPAPERS).map(([key, config]) => (
           <Button
@@ -17,7 +17,7 @@ export function WallpaperSection() {
             variant={wallpaper === key ? 'default' : 'outline'}
             size="sm"
             onClick={() => onWallpaperChange(key as any)}
-            className="text-xs p-2 h-auto"
+            className="text-md p-2 h-auto"
           >
             {key === 'default' && <X className="w-3 h-3" />}
             {key === 'dots' && '🟣'}

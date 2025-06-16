@@ -8,7 +8,7 @@ export function GridSizeSection() {
 
   return (
     <div>
-      <label className="text-sm mb-2 block">Grid Size</label>
+      <label className="text-md mb-2 block">Grid Size</label>
       <Select value={gridSize.toString()} onValueChange={(value) => onGridSizeChange(parseInt(value))}>
         <SelectTrigger className="w-full">
           <SelectValue />

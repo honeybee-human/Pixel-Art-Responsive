@@ -9,6 +9,7 @@ import { PixelArtEditorProps } from '../types';
 import { WALLPAPERS } from '../constants/wallpapers';
 import { PRESET_TEMPLATES } from '../constants/templates';
 import { CANVAS_SIZE_LIMITS } from '../constants/settings';
+import { ThemeToggle } from './ui/theme-toggle';
 
 // Use React.memo for expensive components
 export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: PixelArtEditorProps) {
@@ -52,8 +53,10 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
       if (canvasContainerRef.current) {
         const container = canvasContainerRef.current;
         const containerRect = container.getBoundingClientRect();
-        const availableSize = Math.min(containerRect.width, containerRect.height) - CANVAS_SIZE_LIMITS.PADDING;
-        const newSize = Math.max(CANVAS_SIZE_LIMITS.MIN, Math.min(CANVAS_SIZE_LIMITS.MAX, availableSize));
+        const availableWidth = containerRect.width - 48; // Account for padding
+        const availableHeight = containerRect.height - 48;
+        const maxSize = Math.min(availableWidth, availableHeight, CANVAS_SIZE_LIMITS.MAX);
+        const newSize = Math.max(maxSize, CANVAS_SIZE_LIMITS.MIN);
         setCanvasSize(newSize);
       }
     };
@@ -78,25 +81,21 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
   };
 
   const handleMouseDown = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
+    setIsDrawing(true);
     const coords = getPixelCoordinates(event);
     if (coords) {
-      // Save current state before making changes (for non-fill tools)
-      if (currentTool !== 'fill') {
-        saveToHistory(pixels);
-      }
-      
-      setIsDrawing(true);
       drawPixel(coords.x, coords.y, currentTool, currentColor);
     }
-  }, [getPixelCoordinates, currentTool, saveToHistory, pixels, setIsDrawing, drawPixel, currentColor]);
+  }, [setIsDrawing, getPixelCoordinates, drawPixel, currentColor, currentTool]);
 
   const handleMouseMove = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing) return;
-    const coords = getPixelCoordinates(event);
-    if (coords && currentTool !== 'fill') {
-      drawPixel(coords.x, coords.y, currentTool, currentColor);
+    if (isDrawing) {
+      const coords = getPixelCoordinates(event);
+      if (coords) {
+        drawPixel(coords.x, coords.y, currentTool, currentColor);
+      }
     }
-  }, [isDrawing, getPixelCoordinates, currentTool, drawPixel, currentColor]);
+  }, [isDrawing, getPixelCoordinates, drawPixel, currentColor, currentTool]);
 
   const handleMouseUp = useCallback(() => {
     setIsDrawing(false);
@@ -181,16 +180,20 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           editorActionsValue.onLoadPreset(preset as keyof typeof PRESET_TEMPLATES)
       }}>
         <div 
-          className={`w-screen h-screen overflow-hidden ${WALLPAPERS[wallpaper].style} ${className}`}
+          className={`w-screen h-screen overflow-hidden theme-overlay ${WALLPAPERS[wallpaper].style} ${className || ''}`}
           style={getWallpaperStyle()}
         >
           {/* Header */}
-          <div className="flex items-center justify-center py-4 px-6 glass-header">
+          <div className="flex items-center justify-between py-4 px-6 glass-header">
+            <div></div> {/* Left spacer */}
             <div className="text-center">
               <h1 className="mb-1">Pixel Art Editor</h1>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground dark:text-white">
                 Create amazing pixel art with tools, colors, and templates
               </p>
+            </div>
+            <div className="flex items-center">
+              <ThemeToggle />
             </div>
           </div>
 
