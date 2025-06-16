@@ -195,7 +195,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                 <div></div> {/* Left spacer */}
                 <div className="text-center">
                   <h1 className="mb-1">Pixel Art Editor</h1>
-                  <p className="text-xs dark:text-white">
+                  <p className="text-md dark:text-white">
                     Create amazing pixel art with tools, colors, and templates
                   </p>
                 </div>
