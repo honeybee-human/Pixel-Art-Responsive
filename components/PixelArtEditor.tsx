@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Canvas } from './Canvas';
 import { Sidebar } from './Sidebar';
+import { ToolsSection } from './sidebar/ToolsSection';
 import { EditorStateProvider } from '../contexts/EditorStateContext';
 import { EditorActionsProvider } from '../contexts/EditorActionsContext';
 import { useCanvasLogic } from '../hooks/useCanvasLogic';
@@ -308,69 +309,9 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                 </div>
               </div>
 
-
               {/* Tools and Actions Bar - Above Canvas */}
-              <div className="flex items-center justify-center gap-3 py-4 px-4  shrink-0">
-                {/* Tools */}
-                <Button
-                  variant={currentTool === 'pencil' ? 'default' : 'outline'}
-                  size="lg"
-                  onClick={() => setCurrentTool('pencil')}
-                  className="p-4 h-14 w-14"
-                >
-                  <Pencil className="w-7 h-7" />
-                </Button>
-                <Button
-                  variant={currentTool === 'eraser' ? 'default' : 'outline'}
-                  size="lg"
-                  onClick={() => setCurrentTool('eraser')}
-                  className="p-4 h-14 w-14"
-                >
-                  <Eraser className="w-7 h-7" />
-                </Button>
-                <Button
-                  variant={currentTool === 'fill' ? 'default' : 'outline'}
-                  size="lg"
-                  onClick={() => setCurrentTool('fill')}
-                  className="p-4 h-14 w-14"
-                >
-                  <Paintbrush className="w-7 h-7" />
-                </Button>
-                
-                {/* Separator */}
-                <div className="w-px h-10 bg-border mx-3" />
-                
-                {/* Actions */}
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  onClick={undo}
-                  disabled={!canUndo}
-                  className="p-4 h-14 w-14"
-                >
-                  <Undo2 className="w-7 h-7" />
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  onClick={redo}
-                  disabled={!canRedo}
-                  className="p-4 h-14 w-14"
-                >
-                  <Redo2 className="w-7 h-7" />
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  onClick={clearCanvas}
-                  className="p-4 h-14 w-14"
-                >
-                  <X className="w-7 h-7" />
-                </Button>
-              </div>
-              
+              <ToolsSection />
+
               <div className="flex-1 flex items-center justify-center p-2 md:p-6 min-h-0" ref={canvasContainerRef}>
                 <Canvas
                   ref={canvasRef}
