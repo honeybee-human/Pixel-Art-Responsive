@@ -24,8 +24,7 @@ export function Sidebar({ isMobile, onClose }: SidebarProps) {
       `}
     >
       {isMobile && (
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Tools</h2>
+        <div className="flex justify-end items-center mb-4">
           <Button
             variant="ghost"
             size="sm"

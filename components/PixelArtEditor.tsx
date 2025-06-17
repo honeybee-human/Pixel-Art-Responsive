@@ -7,7 +7,7 @@ import { useCanvasLogic } from '../hooks/useCanvasLogic';
 import { useEditorState } from '../hooks/useEditorState';
 import { useTheme } from '../contexts/ThemeContext';
 import { PixelArtEditorProps, Tool } from '../types';
-import { WALLPAPERS } from '../constants/wallpapers';
+import { WALLPAPERS, Wallpaper, Theme } from '../constants/wallpapers';
 import { PRESET_TEMPLATES } from '../constants/templates';
 import { CANVAS_SIZE_LIMITS } from '../constants/settings';
 import { ThemeToggle } from './ui/theme-toggle';
@@ -20,7 +20,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
-  const { updatePrimaryForWallpaper } = useTheme();
+  const { theme, updatePrimaryForWallpaper } = useTheme();
 
   // Check if we're on mobile
   useEffect(() => {
@@ -110,13 +110,24 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
 
   // Get wallpaper style from constants
   const getWallpaperStyle = (): React.CSSProperties => {
-    const wallpaperConfig = WALLPAPERS[wallpaper];
+    const wallpaperConfig = WALLPAPERS[wallpaper as Wallpaper];
+    const themeConfig = wallpaperConfig[theme as Theme];
     const style: React.CSSProperties = {};
     
-    if ('pattern' in wallpaperConfig) {
-      style.backgroundImage = wallpaperConfig.pattern;
-      style.backgroundSize = wallpaper === 'dots' ? '40px 40px' : 'auto';
+    // Set background
+    if (themeConfig.background) {
+      style.background = themeConfig.background;
+    }
+    
+    // Set pattern if exists (type-safe check)
+    if ('pattern' in themeConfig && themeConfig.pattern) {
+      style.backgroundImage = themeConfig.pattern;
       style.backgroundRepeat = 'repeat';
+    }
+    
+    // Set animation if exists (type-safe check)
+    if ('animation' in themeConfig && themeConfig.animation) {
+      style.animation = themeConfig.animation;
     }
     
     return style;
@@ -235,7 +246,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           editorActionsValue.onLoadPreset(preset as keyof typeof PRESET_TEMPLATES)
       }}>
         <div 
-          className={`w-screen h-screen overflow-hidden theme-overlay ${WALLPAPERS[wallpaper].style} ${className || ''}`}
+          className={`w-screen h-screen overflow-hidden theme-overlay ${WALLPAPERS[wallpaper as Wallpaper][theme as Theme].style} ${className || ''}`}
           style={getWallpaperStyle()}
         >
           <div className="flex h-screen relative">

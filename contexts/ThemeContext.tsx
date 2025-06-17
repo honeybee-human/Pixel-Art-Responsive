@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
-type Wallpaper = 'default' | 'dots' | 'hearts' | 'stars' | 'gradient' | 'kawaii';
+type Wallpaper = 'default' | 'hearts' | 'stars' | 'gradient' | 'kawaii' | 'geometric';
 
 interface ThemeContextType {
   theme: Theme;
@@ -37,32 +37,33 @@ const isLightColor = (color: string): boolean => {
 };
 
 // Define primary color schemes for different wallpapers and themes - SWAPPED
+// Update WALLPAPER_PRIMARY_COLORS to include new wallpapers
 const WALLPAPER_PRIMARY_COLORS = {
   default: {
-    light: 'hsl(220 100% 80%)',       // Very light blue (was dark)
-    dark: 'hsl(220 100% 20%)'         // Very dark blue (was light)
-  },
-  dots: {
-    light: 'hsl(270 100% 75%)',       // Very light purple (was dark)
-    dark: 'hsl(270 100% 25%)'         // Very dark purple (was light)
+    light: 'hsl(220 100% 80%)',
+    dark: 'hsl(220 100% 20%)'
   },
   hearts: {
-    light: 'hsl(330 100% 75%)',       // Very light pink (was dark)
-    dark: 'hsl(330 100% 25%)'         // Very dark pink (was light)
+    light: 'hsl(330 100% 75%)',
+    dark: 'hsl(330 100% 25%)'
   },
   stars: {
-    light: 'hsl(50 100% 70%)',        // Very light yellow (was dark)
-    dark: 'hsl(50 100% 30%)'          // Very dark yellow/gold (was light)
+    light: 'hsl(50 100% 75%)',
+    dark: 'hsl(50 100% 25%)'
   },
   gradient: {
-    light: 'hsl(25 100% 70%)',        // Very light orange (was dark)
-    dark: 'hsl(25 100% 30%)'          // Very dark orange (was light)
+    light: 'hsl(25 100% 75%)',
+    dark: 'hsl(25 100% 25%)'
   },
   kawaii: {
-    light: 'hsl(120 100% 70%)',       // Very light green (was dark)
-    dark: 'hsl(120 100% 20%)'         // Very dark green (was light)
+    light: 'hsl(120 100% 75%)',
+    dark: 'hsl(120 100% 25%)'
+  },
+  geometric: {
+    light: 'hsl(240 100% 75%)',
+    dark: 'hsl(240 100% 25%)'
   }
-} as const;
+};
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
@@ -113,6 +114,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('theme', theme);
     
     // Reset to default primary for theme
+    // Keep the default fallback as 'default'
     const defaultPrimary = WALLPAPER_PRIMARY_COLORS.default[theme];
     setCurrentPrimary(defaultPrimary);
     updateCSSVariables(defaultPrimary);

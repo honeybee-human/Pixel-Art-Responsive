@@ -51,10 +51,6 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Dark theme overlay - doubled darkness */
-.dark .theme-overlay::before {
-  background-color: rgba(0, 0, 0, 0.635);
-}
 
 /* Ensure content appears above overlay */
 .theme-overlay > * {

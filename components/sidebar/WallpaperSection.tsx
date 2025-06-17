@@ -1,30 +1,34 @@
 import React from 'react';
 import { useEditorState } from '../../contexts/EditorStateContext';
 import { WALLPAPERS } from '../../constants/wallpapers';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export function WallpaperSection() {
   const { wallpaper, onWallpaperChange } = useEditorState();
+  const { theme } = useTheme();
 
   const getWallpaperStyle = (wallpaperKey: string) => {
     const config = WALLPAPERS[wallpaperKey as keyof typeof WALLPAPERS];
+    const themeConfig = config[theme];
     const style: React.CSSProperties = {};
     
-    if ('pattern' in config) {
-      style.backgroundImage = config.pattern;
-      style.backgroundSize = wallpaperKey === 'dots' ? '40px 40px' : 'auto';
-      style.backgroundRepeat = 'repeat';
-    } else if (wallpaperKey === 'default') {
-      style.background = 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%)';
-    } else if (wallpaperKey === 'gradient') {
-      style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3)';
-      style.backgroundSize = '600% 600%';
+    // Set background
+    if (themeConfig.background) {
+      style.background = themeConfig.background;
     }
     
-    // Add base background color
-    if (wallpaperKey === 'dots') style.backgroundColor = '#faf5ff';
-    else if (wallpaperKey === 'hearts') style.backgroundColor = '#fdf2f8';
-    else if (wallpaperKey === 'stars') style.backgroundColor = '#fefce8';
-    else if (wallpaperKey === 'kawaii') style.backgroundColor = '#f0fdf4';
+    // Set pattern if exists (type-safe check)
+    if ('pattern' in themeConfig && themeConfig.pattern) {
+      style.backgroundImage = themeConfig.pattern;
+      style.backgroundSize = wallpaperKey === 'dots' ? '40px 40px' : 'auto';
+      style.backgroundRepeat = 'repeat';
+    }
+    
+    // Set animation if exists (type-safe check) - but disable for preview
+    if ('animation' in themeConfig && themeConfig.animation) {
+      // Don't apply animation to preview for performance
+      style.backgroundSize = style.backgroundSize || '600% 600%';
+    }
     
     return style;
   };
