@@ -36,31 +36,31 @@ const isLightColor = (color: string): boolean => {
   return brightness > 128;
 };
 
-// Define primary color schemes for different wallpapers and themes
+// Define primary color schemes for different wallpapers and themes - SWAPPED
 const WALLPAPER_PRIMARY_COLORS = {
   default: {
-    light: 'hsl(220 100% 20%)',       // Very dark blue
-    dark: 'hsl(220 100% 80%)'         // Very light blue
+    light: 'hsl(220 100% 80%)',       // Very light blue (was dark)
+    dark: 'hsl(220 100% 20%)'         // Very dark blue (was light)
   },
   dots: {
-    light: 'hsl(270 100% 25%)',       // Very dark purple
-    dark: 'hsl(270 100% 75%)'         // Very light purple
+    light: 'hsl(270 100% 75%)',       // Very light purple (was dark)
+    dark: 'hsl(270 100% 25%)'         // Very dark purple (was light)
   },
   hearts: {
-    light: 'hsl(330 100% 25%)',       // Very dark pink
-    dark: 'hsl(330 100% 75%)'         // Very light pink
+    light: 'hsl(330 100% 75%)',       // Very light pink (was dark)
+    dark: 'hsl(330 100% 25%)'         // Very dark pink (was light)
   },
   stars: {
-    light: 'hsl(50 100% 30%)',        // Very dark yellow/gold
-    dark: 'hsl(50 100% 70%)'          // Very light yellow
+    light: 'hsl(50 100% 70%)',        // Very light yellow (was dark)
+    dark: 'hsl(50 100% 30%)'          // Very dark yellow/gold (was light)
   },
   gradient: {
-    light: 'hsl(25 100% 30%)',        // Very dark orange
-    dark: 'hsl(25 100% 70%)'          // Very light orange
+    light: 'hsl(25 100% 70%)',        // Very light orange (was dark)
+    dark: 'hsl(25 100% 30%)'          // Very dark orange (was light)
   },
   kawaii: {
-    light: 'hsl(120 100% 20%)',       // Very dark green
-    dark: 'hsl(120 100% 70%)'         // Very light green
+    light: 'hsl(120 100% 70%)',       // Very light green (was dark)
+    dark: 'hsl(120 100% 20%)'         // Very dark green (was light)
   }
 } as const;
 

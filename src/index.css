@@ -2,7 +2,7 @@
 @import '../styles/base.css';
 @import '../styles/wallpapers.css';
 @import '../styles/typography.css';
-@import '../styles/glassmorphism.css';
+@import '../styles/lightdark.css';
 
 @theme inline {
   --color-background: var(--background);

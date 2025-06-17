@@ -1,0 +1,184 @@
+/* Enhanced glassmorphism effects with more visible light */
+
+.bg-rainbow-gradient {
+  background: linear-gradient(135deg,
+    #fbcfe8 0%,    /* pink-200 */
+    #e9d5ff 20%,   /* purple-200 */ 
+    #bfdbfe 40%,   /* blue-200 */
+    #bbf7d0 60%,   /* green-200 */
+    #fef08a 80%,   /* yellow-200 */
+    #fbcfe8 100%   /* pink-200 */
+  );
+}
+
+/* Plain white backgrounds for light mode */
+.glass-light {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.glass-medium {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.glass-dark {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.glass-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.glass-sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.glass-select {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Plain black backgrounds for dark mode */
+.dark .glass-light {
+  background: #000000;
+  border: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .glass-medium {
+  background: #000000;
+  border: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .glass-dark {
+  background: #000000;
+  border: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .glass-header {
+  background: #000000;
+  border-bottom: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .glass-sidebar {
+  background: #000000;
+  border-right: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .glass-select {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-select * {
+  color: #ffffff !important;
+}
+
+/* Simple hover effects */
+.glass-light:hover,
+.glass-medium:hover,
+.glass-dark:hover,
+.glass-header:hover,
+.glass-sidebar:hover {
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glass-light:hover,
+.dark .glass-medium:hover,
+.dark .glass-dark:hover,
+.dark .glass-header:hover,
+.dark .glass-sidebar:hover {
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.15);
+}
+
+/* Simple panel styles - replaces all glass-* variants */
+.panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.panel:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Header specific styling */
+.panel-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar specific styling */
+.panel-sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Select dropdown styling */
+.panel-select {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode variants */
+.dark .panel {
+  background: #000000;
+  border: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .panel:hover {
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.15);
+}
+
+.dark .panel-header {
+  background: #000000;
+  border-bottom: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .panel-sidebar {
+  background: #000000;
+  border-right: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .panel-select {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+}
+
+.dark .panel-select * {
+  color: #ffffff !important;
+}
