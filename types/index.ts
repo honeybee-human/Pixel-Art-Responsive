@@ -11,3 +11,15 @@ export interface CanvasProps {
   onMouseUp: () => void;
   onMouseLeave: () => void;
 }
+
+export interface PixelChange {
+  x: number;
+  y: number;
+  oldColor: string;
+  newColor: string;
+  }
+  
+ export  interface DrawAction {
+  type: 'draw' | 'erase' | 'fill';
+  changes: PixelChange[];
+  }

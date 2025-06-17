@@ -1,26 +1,24 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { Canvas } from './Canvas';
 import { Sidebar } from './Sidebar';
 import { EditorStateProvider } from '../contexts/EditorStateContext';
 import { EditorActionsProvider } from '../contexts/EditorActionsContext';
 import { useCanvasLogic } from '../hooks/useCanvasLogic';
 import { useEditorState } from '../hooks/useEditorState';
-import { useTheme } from '../contexts/ThemeContext'; // Import the enhanced theme hook
-import { PixelArtEditorProps } from '../types';
+import { useTheme } from '../contexts/ThemeContext';
+import { PixelArtEditorProps, Tool } from '../types';
 import { WALLPAPERS } from '../constants/wallpapers';
 import { PRESET_TEMPLATES } from '../constants/templates';
 import { CANVAS_SIZE_LIMITS } from '../constants/settings';
 import { ThemeToggle } from './ui/theme-toggle';
 
-// Use React.memo for expensive components
 export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: PixelArtEditorProps) {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
-  const [canvasSize, setCanvasSize] = React.useState(600);
+  const [canvasSize, setCanvasSize] = useState(600);
   
-  // Get theme context
   const { updatePrimaryForWallpaper } = useTheme();
 
-  // Editor state management
+  // Editor state management from its own hook
   const {
     gridSize,
     currentColor,
@@ -34,19 +32,20 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     handleCustomColorChange
   } = useEditorState();
 
-  // Canvas logic management
+  // Canvas logic management from the new, corrected hook
   const {
     canvasRef,
     pixels,
-    setPixels,
     isDrawing,
     setIsDrawing,
     getPixelCoordinates,
     drawPixel,
-    saveToHistory,
+    startDrawing,
+    endDrawing,
     undo,
     redo,
     clearCanvas,
+    setPixelsWithHistory,
     canUndo,
     canRedo
   } = useCanvasLogic(gridSize, canvasSize);
@@ -57,8 +56,8 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
       if (canvasContainerRef.current) {
         const container = canvasContainerRef.current;
         const containerRect = container.getBoundingClientRect();
-        const availableWidth = containerRect.width - 48;
-        const availableHeight = containerRect.height - 48;
+        const availableWidth = containerRect.width - 48; // p-6 padding on each side
+        const availableHeight = containerRect.height - 48; // p-6 padding on each side
         const maxSize = Math.min(availableWidth, availableHeight, CANVAS_SIZE_LIMITS.MAX);
         const newSize = Math.max(maxSize, CANVAS_SIZE_LIMITS.MIN);
         setCanvasSize(newSize);
@@ -70,14 +69,13 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     return () => window.removeEventListener('resize', updateCanvasSize);
   }, []);
 
-  // Update primary color when wallpaper changes
+  // Update primary theme color when wallpaper changes
   useEffect(() => {
-    // Update primary color based on the current wallpaper
     updatePrimaryForWallpaper(wallpaper);
   }, [wallpaper, updatePrimaryForWallpaper]);
 
-  // Get wallpaper style
-  const getWallpaperStyle = () => {
+  // Get wallpaper style from constants
+  const getWallpaperStyle = (): React.CSSProperties => {
     const wallpaperConfig = WALLPAPERS[wallpaper];
     const style: React.CSSProperties = {};
     
@@ -90,30 +88,45 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     return style;
   };
 
+  // --- Mouse Event Handlers ---
+
   const handleMouseDown = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDrawing(true);
+    // For tools that support click-and-drag, start a new drawing action.
+    if (currentTool === 'pencil' || currentTool === 'eraser') {
+      startDrawing(currentTool as Tool);
+    }
     const coords = getPixelCoordinates(event);
     if (coords) {
+      // This will handle fill immediately, or start tracking for pencil/eraser.
       drawPixel(coords.x, coords.y, currentTool, currentColor);
     }
-  }, [setIsDrawing, getPixelCoordinates, drawPixel, currentColor, currentTool]);
+  }, [setIsDrawing, startDrawing, getPixelCoordinates, drawPixel, currentColor, currentTool]);
 
   const handleMouseMove = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (isDrawing) {
+    if (isDrawing && (currentTool === 'pencil' || currentTool === 'eraser')) {
       const coords = getPixelCoordinates(event);
       if (coords) {
+        // Continue the current drawing action.
         drawPixel(coords.x, coords.y, currentTool, currentColor);
       }
     }
   }, [isDrawing, getPixelCoordinates, drawPixel, currentColor, currentTool]);
 
   const handleMouseUp = useCallback(() => {
-    setIsDrawing(false);
-  }, [setIsDrawing]);
+    if (isDrawing) {
+      setIsDrawing(false);
+      // For click-and-drag tools, end the drawing action to save it to history.
+      if (currentTool === 'pencil' || currentTool === 'eraser') {
+        endDrawing();
+      }
+    }
+  }, [isDrawing, setIsDrawing, endDrawing, currentTool]);
+
+
+  // --- Action Functions ---
 
   const loadPreset = useCallback((presetName: keyof typeof PRESET_TEMPLATES) => {
-    saveToHistory(pixels);
-    
     const template = PRESET_TEMPLATES[presetName];
     if (template && template.length === 16) {
       const scaledTemplate = Array(gridSize).fill(null).map((_, y) => 
@@ -123,37 +136,37 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           return template[templateY][templateX];
         })
       );
-      setPixels(scaledTemplate);
+      // Use the new function to make this action undoable
+      setPixelsWithHistory(scaledTemplate);
     }
-  }, [saveToHistory, pixels, gridSize, setPixels]);
+  }, [gridSize, setPixelsWithHistory]);
 
   const downloadImage = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
     const downloadCanvas = document.createElement('canvas');
-    const downloadCtx = downloadCanvas.getContext('2d');
-    if (!downloadCtx) return;
-
     downloadCanvas.width = gridSize;
     downloadCanvas.height = gridSize;
+    const ctx = downloadCanvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Disable image smoothing to get crisp pixels
+    ctx.imageSmoothingEnabled = false;
 
     pixels.forEach((row, y) => {
       row.forEach((color, x) => {
-        if (color !== 'transparent') {
-          downloadCtx.fillStyle = color;
-          downloadCtx.fillRect(x, y, 1, 1);
+        if (color && color !== 'transparent') {
+          ctx.fillStyle = color;
+          ctx.fillRect(x, y, 1, 1);
         }
       });
     });
 
     const link = document.createElement('a');
     link.download = `pixel-art-${gridSize}x${gridSize}-${Date.now()}.png`;
-    link.href = downloadCanvas.toDataURL();
+    link.href = downloadCanvas.toDataURL('image/png');
     link.click();
-  }, [canvasRef, gridSize, pixels]);
+  }, [gridSize, pixels]);
 
-  // Create context values
+  // Create context values to pass down to children (Sidebar, etc.)
   const editorStateValue = {
     currentTool,
     currentColor,
@@ -174,7 +187,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     onRedo: redo,
     onClear: clearCanvas,
     onDownload: downloadImage,
-    onLoadPreset: loadPreset
+    onLoadPreset: loadPreset,
   };
 
   return (
@@ -205,20 +218,15 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                 </div>
               </div>
 
-              <div className="flex-1 flex items-center justify-center p-6">
-                <div 
-                  ref={canvasContainerRef}
-                  className="w-full h-full flex items-center justify-center"
-                >
+              <div className="flex-1 flex items-center justify-center p-6" ref={canvasContainerRef}>
                   <Canvas
                     ref={canvasRef}
                     canvasSize={canvasSize}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
+                    onMouseLeave={handleMouseUp} // Also end drawing if mouse leaves canvas
                   />
-                </div>
               </div>
             </div>
           </div>
