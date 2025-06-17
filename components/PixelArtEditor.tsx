@@ -11,12 +11,45 @@ import { WALLPAPERS } from '../constants/wallpapers';
 import { PRESET_TEMPLATES } from '../constants/templates';
 import { CANVAS_SIZE_LIMITS } from '../constants/settings';
 import { ThemeToggle } from './ui/theme-toggle';
+import { Button } from './ui/button';
+import { Menu, X } from 'lucide-react';
 
 export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: PixelArtEditorProps) {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState(600);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   const { updatePrimaryForWallpaper } = useTheme();
+
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobile && isSidebarOpen) {
+        const sidebar = document.getElementById('sidebar');
+        const menuButton = document.getElementById('menu-button');
+        
+        if (sidebar && !sidebar.contains(event.target as Node) && 
+            menuButton && !menuButton.contains(event.target as Node)) {
+          setIsSidebarOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobile, isSidebarOpen]);
 
   // Editor state management from its own hook
   const {
@@ -56,8 +89,9 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
       if (canvasContainerRef.current) {
         const container = canvasContainerRef.current;
         const containerRect = container.getBoundingClientRect();
-        const availableWidth = containerRect.width - 48; // p-6 padding on each side
-        const availableHeight = containerRect.height - 48; // p-6 padding on each side
+        const padding = isMobile ? 16 : 48; // Less padding on mobile
+        const availableWidth = containerRect.width - padding;
+        const availableHeight = containerRect.height - padding;
         const maxSize = Math.min(availableWidth, availableHeight, CANVAS_SIZE_LIMITS.MAX);
         const newSize = Math.max(maxSize, CANVAS_SIZE_LIMITS.MIN);
         setCanvasSize(newSize);
@@ -67,7 +101,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
     return () => window.removeEventListener('resize', updateCanvasSize);
-  }, []);
+  }, [isMobile]);
 
   // Update primary theme color when wallpaper changes
   useEffect(() => {
@@ -122,7 +156,6 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
       }
     }
   }, [isDrawing, setIsDrawing, endDrawing, currentTool]);
-
 
   // --- Action Functions ---
 
@@ -190,6 +223,10 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     onLoadPreset: loadPreset,
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <EditorStateProvider value={editorStateValue}>
       <EditorActionsProvider value={{
@@ -201,32 +238,65 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           className={`w-screen h-screen overflow-hidden theme-overlay ${WALLPAPERS[wallpaper].style} ${className || ''}`}
           style={getWallpaperStyle()}
         >
-          <div className="flex h-screen">
-            <Sidebar />
+          <div className="flex h-screen relative">
+            {/* Sidebar - Desktop: Always visible, Mobile: Drawer overlay */}
+            <div className={`
+              ${isMobile ? 'fixed inset-y-0 left-0 z-50' : 'relative'}
+              ${isMobile && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'}
+              transition-transform duration-300 ease-in-out
+            `}>
+              <Sidebar 
+                isMobile={isMobile} 
+                onClose={() => setIsSidebarOpen(false)} 
+              />
+            </div>
 
-            <div className="flex-1 flex flex-col">
-              <div className="flex items-center justify-between py-4 px-6 glass-header">
-                <div></div>
+            {/* Backdrop for mobile drawer */}
+            {isMobile && isSidebarOpen && (
+              <div 
+                className="fixed inset-0 bg-black/50 z-40"
+                onClick={() => setIsSidebarOpen(false)}
+              />
+            )}
+
+            {/* Main content */}
+            <div className="flex-1 flex flex-col min-w-0">
+              <div className="flex items-center justify-between py-4 px-4 md:px-6 glass-header">
+                <div className="flex items-center">
+                  {isMobile && (
+                    <Button
+                      id="menu-button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={toggleSidebar}
+                      className="mr-2"
+                    >
+                      {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+                    </Button>
+                  )}
+                </div>
+                
                 <div className="text-center">
-                  <h1 className="mb-1">Pixel Art Editor</h1>
-                  <p className="text-md dark:text-white">
+                  <h1 className="mb-1 text-lg md:text-xl">Pixel Art Editor</h1>
+                  <p className="text-sm md:text-md dark:text-white hidden sm:block">
                     Made this because I can't draw for my life
                   </p>
                 </div>
+                
                 <div className="flex items-center">
                   <ThemeToggle />
                 </div>
               </div>
 
-              <div className="flex-1 flex items-center justify-center p-6" ref={canvasContainerRef}>
-                  <Canvas
-                    ref={canvasRef}
-                    canvasSize={canvasSize}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp} // Also end drawing if mouse leaves canvas
-                  />
+              <div className="flex-1 flex items-center justify-center p-2 md:p-6" ref={canvasContainerRef}>
+                <Canvas
+                  ref={canvasRef}
+                  canvasSize={canvasSize}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                />
               </div>
             </div>
           </div>
