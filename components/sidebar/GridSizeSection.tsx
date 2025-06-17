@@ -1,6 +1,5 @@
-import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { useEditorState } from '../../contexts/EditorStateContext';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { GRID_SIZES } from '../../constants/settings';
 
 export function GridSizeSection() {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '../ui/button';
 import { useEditorActions } from '../../contexts/EditorActionsContext';
 import { PRESET_TEMPLATES } from '../../constants/templates';

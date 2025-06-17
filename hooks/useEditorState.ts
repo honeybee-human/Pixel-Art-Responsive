@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Tool } from '../types';
 import { Wallpaper } from '../constants/wallpapers';
-import { PRESET_TEMPLATES } from '../constants/templates';
 
 export function useEditorState() {
   const [gridSize, setGridSize] = useState(16);

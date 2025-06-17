@@ -12,30 +12,6 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-// Helper function to determine if a color is light or dark
-const isLightColor = (color: string): boolean => {
-  // Handle different color formats
-  let hex = color;
-  
-  // Convert named colors or handle CSS variables
-  if (color.startsWith('var(')) {
-    const computed = getComputedStyle(document.documentElement).getPropertyValue(color.slice(4, -1));
-    hex = computed.trim();
-  }
-  
-  // Remove # if present
-  hex = hex.replace('#', '');
-  
-  // Convert to RGB
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-  
-  // Calculate brightness using luminance formula
-  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-  return brightness > 128;
-};
-
 // Define primary color schemes for different wallpapers and themes - SWAPPED
 // Update WALLPAPER_PRIMARY_COLORS to include new wallpapers
 const WALLPAPER_PRIMARY_COLORS = {

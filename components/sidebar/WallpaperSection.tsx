@@ -37,7 +37,7 @@ export function WallpaperSection() {
     <div>
       <h3>Wallpaper</h3>
       <div className="grid grid-cols-3 gap-2">
-        {Object.entries(WALLPAPERS).map(([key, config]) => (
+        {Object.entries(WALLPAPERS).map(([key]) => (
           <button
             key={key}
             onClick={() => onWallpaperChange(key as any)}

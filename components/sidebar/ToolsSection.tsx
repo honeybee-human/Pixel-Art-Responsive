@@ -1,7 +1,6 @@
-import React from 'react';
+import { useEditorState } from '../../contexts/EditorStateContext';
 import { Button } from '../ui/button';
 import { Pencil, Eraser, Paintbrush } from 'lucide-react';
-import { useEditorState } from '../../contexts/EditorStateContext';
 
 export function ToolsSection() {
   const { currentTool, onToolChange } = useEditorState();

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Separator } from './ui/separator';
 import { ToolsSection } from './sidebar/ToolsSection';
 import { ActionsSection } from './sidebar/ActionsSection';

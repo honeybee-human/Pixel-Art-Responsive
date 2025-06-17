@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '../ui/button';
 import { Undo2, Redo2, Trash2, Download } from 'lucide-react';
 import { useEditorActions } from '../../contexts/EditorActionsContext';

@@ -44,7 +44,6 @@ export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
             onTouchStart={(e) => {
               e.preventDefault();
               const touch = e.touches[0];
-              const rect = e.currentTarget.getBoundingClientRect();
               const mouseEvent = new MouseEvent('mousedown', {
                 clientX: touch.clientX,
                 clientY: touch.clientY,
@@ -55,7 +54,6 @@ export const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
             onTouchMove={(e) => {
               e.preventDefault();
               const touch = e.touches[0];
-              const rect = e.currentTarget.getBoundingClientRect();
               const mouseEvent = new MouseEvent('mousemove', {
                 clientX: touch.clientX,
                 clientY: touch.clientY,
