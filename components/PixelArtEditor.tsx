@@ -114,6 +114,11 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
     const themeConfig = wallpaperConfig[theme as Theme];
     const style: React.CSSProperties = {};
     
+    // For gradient wallpaper, use CSS class instead of inline styles
+    if (wallpaper === 'gradient') {
+      return {}; // Let the CSS class handle the styling
+    }
+    
     // Set background
     if (themeConfig.background) {
       style.background = themeConfig.background;
@@ -246,7 +251,11 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
           editorActionsValue.onLoadPreset(preset as keyof typeof PRESET_TEMPLATES)
       }}>
         <div 
-          className={`w-screen h-screen overflow-hidden theme-overlay ${WALLPAPERS[wallpaper as Wallpaper][theme as Theme].style} ${className || ''}`}
+          className={`w-screen h-screen overflow-hidden theme-overlay ${
+            wallpaper === 'gradient' 
+              ? 'bg-rainbow-gradient' 
+              : WALLPAPERS[wallpaper as Wallpaper][theme as Theme].style
+          } ${className || ''}`}
           style={getWallpaperStyle()}
         >
           <div className="flex h-screen relative">

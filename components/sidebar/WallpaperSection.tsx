@@ -42,14 +42,18 @@ export function WallpaperSection() {
             key={key}
             onClick={() => onWallpaperChange(key as any)}
             className={`p-1 rounded-lg border-2 transition-all duration-300 ${
+              key === 'gradient' ? 'bg-rainbow-gradient' : ''
+            } ${
               wallpaper === key 
                 ? 'border-primary bg-primary/10' 
                 : 'border-gray-300 hover:border-gray-400'
             }`}
           >
             <div 
-              className="w-full h-10 rounded-md"
-              style={getWallpaperStyle(key)}
+              className={`w-full h-10 rounded-md ${
+                key === 'gradient' ? 'bg-rainbow-gradient' : ''
+              }`}
+              style={key === 'gradient' ? {} : getWallpaperStyle(key)}
             />
           </button>
         ))}

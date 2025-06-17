@@ -19,6 +19,39 @@
   background: linear-gradient(135deg, #b2d8f0 0%, #d6b7dc 100%); /* light sky blue to a slightly darker sky blue */
 }
 
+/* Add these keyframe animations at the end of the file */
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes rainbowMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* Enhanced rainbow gradient with animation */
 .bg-rainbow-gradient {
   background: linear-gradient(135deg, 
     #fbcfe8 0%,    /* pink-200 */
@@ -28,6 +61,27 @@
     #fef08a 80%,   /* yellow-200 */
     #fbcfe8 100%   /* pink-200 */
   );
+  background-size: 400% 400%;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* Alternative moving rainbow for buttons */
+.bg-rainbow-animated {
+  background: linear-gradient(45deg, 
+    #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #dda0dd, #ff6b6b
+  );
+  background-size: 600% 600%;
+  animation: rainbowMove 8s ease infinite;
+}
+
+/* Fast moving rainbow */
+.bg-rainbow-fast {
+  background: linear-gradient(90deg, 
+    #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, 
+    #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000
+  );
+  background-size: 1200% 100%;
+  animation: gradientShift 3s linear infinite;
 }
 
 /* Theme overlay classes */

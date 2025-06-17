@@ -9,6 +9,21 @@
     #fef08a 80%,   /* yellow-200 */
     #fbcfe8 100%   /* pink-200 */
   );
+  background-size: 400% 400%;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* Add the keyframes if not already present */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Plain white backgrounds for light mode */
