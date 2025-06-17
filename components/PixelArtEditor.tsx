@@ -13,7 +13,7 @@ import { PRESET_TEMPLATES } from '../constants/templates';
 import { CANVAS_SIZE_LIMITS } from '../constants/settings';
 import { ThemeToggle } from './ui/theme-toggle';
 import { Button } from './ui/button';
-import { Menu, X, Undo2, Redo2, Pencil, Eraser, Paintbrush } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: PixelArtEditorProps) {
   const canvasContainerRef = useRef<HTMLDivElement>(null);

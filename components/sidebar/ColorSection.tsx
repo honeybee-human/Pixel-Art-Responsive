@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEditorState } from '../../contexts/EditorStateContext';
 import { Button } from '../ui/button';
 import { PRESET_COLORS } from '../../constants/colors';
