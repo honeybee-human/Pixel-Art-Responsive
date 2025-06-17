@@ -7,15 +7,15 @@ export function PresetsSection() {
 
   return (
     <div>
-      <label className="text-md mb-2 block">Preset Templates</label>
-      <div className="grid grid-cols-2 gap-2">
+      <label className="text-lg mb-3 block font-medium">Preset Templates</label>
+      <div className="grid grid-cols-1 gap-3">
         {Object.keys(PRESET_TEMPLATES).map((presetName) => (
           <Button
             key={presetName}
             variant="outline"
-            size="sm"
+            size="lg"
             onClick={() => onLoadPreset(presetName)}
-            className="text-md capitalize"
+            className="text-lg capitalize h-14 hover:scale-105 transition-transform"
           >
             {presetName.replace(/([A-Z])/g, ' $1').trim()}
           </Button>

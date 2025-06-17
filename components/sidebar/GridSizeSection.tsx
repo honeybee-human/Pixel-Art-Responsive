@@ -7,14 +7,14 @@ export function GridSizeSection() {
 
   return (
     <div>
-      <label className="text-md mb-2 block">Grid Size</label>
+      <label className="text-lg mb-3 block font-medium">Grid Size</label>
       <Select value={gridSize.toString()} onValueChange={(value) => onGridSizeChange(parseInt(value))}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full h-14 text-lg">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {GRID_SIZES.map(size => (
-            <SelectItem key={size} value={size.toString()}>{size}×{size}</SelectItem>
+            <SelectItem key={size} value={size.toString()} className="text-lg py-3">{size}×{size}</SelectItem>
           ))}
         </SelectContent>
       </Select>

@@ -12,7 +12,7 @@ import { PRESET_TEMPLATES } from '../constants/templates';
 import { CANVAS_SIZE_LIMITS } from '../constants/settings';
 import { ThemeToggle } from './ui/theme-toggle';
 import { Button } from './ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Undo2, Redo2, Pencil, Eraser, Paintbrush } from 'lucide-react';
 
 export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: PixelArtEditorProps) {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -89,7 +89,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
       if (canvasContainerRef.current) {
         const container = canvasContainerRef.current;
         const containerRect = container.getBoundingClientRect();
-        const padding = isMobile ? 16 : 48; // Less padding on mobile
+        const padding = isMobile ? 16 : 48;
         const availableWidth = containerRect.width - padding;
         const availableHeight = containerRect.height - padding;
         const maxSize = Math.min(availableWidth, availableHeight, CANVAS_SIZE_LIMITS.MAX);
@@ -280,8 +280,8 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
             )}
 
             {/* Main content */}
-            <div className="flex-1 flex flex-col min-w-0">
-              <div className="flex items-center justify-between py-4 px-4 md:px-6 glass-header">
+            <div className="flex-1 flex flex-col min-w-0 h-screen">
+              <div className="flex items-center justify-between py-2 px-4 md:px-6 glass-header shrink-0">
                 <div className="flex items-center">
                   {isMobile && (
                     <Button
@@ -308,7 +308,70 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                 </div>
               </div>
 
-              <div className="flex-1 flex items-center justify-center p-2 md:p-6" ref={canvasContainerRef}>
+
+              {/* Tools and Actions Bar - Above Canvas */}
+              <div className="flex items-center justify-center gap-3 py-4 px-4  shrink-0">
+                {/* Tools */}
+                <Button
+                  variant={currentTool === 'pencil' ? 'default' : 'outline'}
+                  size="lg"
+                  onClick={() => setCurrentTool('pencil')}
+                  className="p-4 h-14 w-14"
+                >
+                  <Pencil className="w-7 h-7" />
+                </Button>
+                <Button
+                  variant={currentTool === 'eraser' ? 'default' : 'outline'}
+                  size="lg"
+                  onClick={() => setCurrentTool('eraser')}
+                  className="p-4 h-14 w-14"
+                >
+                  <Eraser className="w-7 h-7" />
+                </Button>
+                <Button
+                  variant={currentTool === 'fill' ? 'default' : 'outline'}
+                  size="lg"
+                  onClick={() => setCurrentTool('fill')}
+                  className="p-4 h-14 w-14"
+                >
+                  <Paintbrush className="w-7 h-7" />
+                </Button>
+                
+                {/* Separator */}
+                <div className="w-px h-10 bg-border mx-3" />
+                
+                {/* Actions */}
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={undo}
+                  disabled={!canUndo}
+                  className="p-4 h-14 w-14"
+                >
+                  <Undo2 className="w-7 h-7" />
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={redo}
+                  disabled={!canRedo}
+                  className="p-4 h-14 w-14"
+                >
+                  <Redo2 className="w-7 h-7" />
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={clearCanvas}
+                  className="p-4 h-14 w-14"
+                >
+                  <X className="w-7 h-7" />
+                </Button>
+              </div>
+              
+              <div className="flex-1 flex items-center justify-center p-2 md:p-6 min-h-0" ref={canvasContainerRef}>
                 <Canvas
                   ref={canvasRef}
                   canvasSize={canvasSize}

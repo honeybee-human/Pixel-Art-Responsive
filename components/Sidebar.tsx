@@ -1,6 +1,4 @@
 import { Separator } from './ui/separator';
-import { ToolsSection } from './sidebar/ToolsSection';
-import { ActionsSection } from './sidebar/ActionsSection';
 import { ColorSection } from './sidebar/ColorSection';
 import { GridSizeSection } from './sidebar/GridSizeSection';
 import { PresetsSection } from './sidebar/PresetsSection';
@@ -18,27 +16,23 @@ export function Sidebar({ isMobile, onClose }: SidebarProps) {
     <div 
       id="sidebar"
       className={`
-        w-80 p-4 glass-sidebar overflow-y-auto h-full
+        w-96 p-6 glass-sidebar overflow-y-auto h-full
         ${isMobile ? 'shadow-lg' : ''}
       `}
     >
       {isMobile && (
-        <div className="flex justify-end items-center mb-4">
+        <div className="flex justify-end items-center mb-6">
           <Button
             variant="ghost"
-            size="sm"
+            size="lg"
             onClick={onClose}
           >
-            <X size={20} />
+            <X size={24} />
           </Button>
         </div>
       )}
       
-      <div className="space-y-4">
-        <ToolsSection />
-        <Separator />
-        <ActionsSection />
-        <Separator />
+      <div className="space-y-8">
         <GridSizeSection />
         <Separator />
         <WallpaperSection />

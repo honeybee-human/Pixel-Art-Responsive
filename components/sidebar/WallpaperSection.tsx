@@ -35,24 +35,24 @@ export function WallpaperSection() {
 
   return (
     <div>
-      <h3>Wallpaper</h3>
-      <div className="grid grid-cols-3 gap-2">
+      <label className="text-lg mb-3 block font-medium">Wallpaper</label>
+      <div className="grid grid-cols-3 gap-3">
         {Object.entries(WALLPAPERS).map(([key]) => (
           <button
             key={key}
             onClick={() => onWallpaperChange(key as any)}
-            className={`p-1 rounded-lg border-2 transition-all duration-300 ${
+            className={`p-2 rounded-xl border-4 transition-all duration-300 hover:scale-105 shadow-md ${
               key === 'gradient' ? 'bg-rainbow-gradient' : ''
             } ${
               wallpaper === key 
-                ? 'border-primary bg-primary/10' 
+                ? 'border-primary bg-primary/10 ring-4 ring-primary ring-offset-2' 
                 : 'border-gray-300 hover:border-gray-400'
             }`}
           >
             <div 
-              className={`w-full h-10 rounded-md ${
+              className={`w-full rounded-lg ${
                 key === 'gradient' ? 'bg-rainbow-gradient' : ''
-              }`}
+              } h-12 md:h-12 sm:h-16`}
               style={key === 'gradient' ? {} : getWallpaperStyle(key)}
             />
           </button>
