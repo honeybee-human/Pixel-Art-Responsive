@@ -308,7 +308,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                   <ThemeToggle />
                 </div>
               </div>
-
+<div>
               {/* Tools Section - Responsive layout */}
               <div className="shrink-0">
                 <ToolsSection />
@@ -324,6 +324,7 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                   onMouseUp={handleMouseUp}
                   onMouseLeave={handleMouseUp}
                 />
+              </div>
               </div>
             </div>
           </div>
