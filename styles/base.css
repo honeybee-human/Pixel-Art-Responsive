@@ -48,3 +48,32 @@
   --input: oklch(0.269 0 0);
   --ring: oklch(0.439 0 0);
 }
+
+/* Prevent scrolling on mobile */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Ensure mobile browsers respect viewport height */
+@supports (-webkit-touch-callout: none) {
+  html, body, #root {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Additional mobile-specific fixes */
+@media (max-width: 640px) {
+  body {
+    touch-action: none;
+    -webkit-overflow-scrolling: none;
+  }
+}

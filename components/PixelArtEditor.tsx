@@ -309,9 +309,12 @@ export const PixelArtEditor = React.memo(function PixelArtEditor({ className }: 
                 </div>
               </div>
 
-              {/* Tools and Actions Bar - Above Canvas */}
-              <ToolsSection />
+              {/* Tools Section - Responsive layout */}
+              <div className="shrink-0">
+                <ToolsSection />
+              </div>
 
+              {/* Canvas Container */}
               <div className="flex-1 flex items-center justify-center p-2 md:p-6 min-h-0" ref={canvasContainerRef}>
                 <Canvas
                   ref={canvasRef}
